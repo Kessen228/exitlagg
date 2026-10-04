@@ -108,7 +108,9 @@ class ProcessManager:
             cmd = ["taskkill"]
             for proc in procs:
                 cmd += ["/PID", str(proc.pid)]
-            subprocess.run(cmd, capture_output=True, creationflags=CREATE_NO_WINDOW, check=False)
+            # stdin тоже перенаправляем: в exe без консоли стандартные дескрипторы недействительны.
+            subprocess.run(cmd, stdin=subprocess.DEVNULL, capture_output=True,
+                           creationflags=CREATE_NO_WINDOW, check=False)
         else:
             for proc in procs:
                 try:
